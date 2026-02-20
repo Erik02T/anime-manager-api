@@ -16,7 +16,7 @@ Estrutura escalável
 
 🚀 API online (Railway):
 
-🔗 anime-manager-api-production.up.railway.app
+🔗 anime-manager-api-production.up.railway.app/docs
 
 🧠 Sobre o Projeto
 
@@ -208,3 +208,4 @@ Documentação Swagger aprimorada
 Sistema de favoritos
 
 Paginação
+
