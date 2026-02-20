@@ -7,4 +7,7 @@ app = FastAPI()
 
 app.include_router(auth.router)
 app.include_router(animes.router)
-  models.Base.metadata.create_all(bind=engine)
+
+@app.on_event("startup")
+def on_startup():
+    models.Base.metadata.create_all(bind=engine)
