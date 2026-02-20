@@ -44,7 +44,7 @@ This project was built following real-world backend architecture principles.
 ### DevOps
 - Docker
 - Docker Compose
-- Render (Cloud Deployment)
+- Railway (Cloud Deployment)
 
 ---
 
@@ -127,4 +127,5 @@ Brazil 🇧🇷
 📜 License
 
 This project is for educational and portfolio purposes.
+
 
