@@ -6,13 +6,6 @@ Built with modern backend architecture using FastAPI, PostgreSQL, Docker and JWT
 
 ---
 
-## 🚀 Live Demo
-
-API Documentation:
-https://your-app-url.onrender.com/docs
-
----
-
 ## 🧠 Project Overview
 
 Anime Manager API is a full-featured backend system that allows users to:
@@ -134,3 +127,4 @@ Brazil 🇧🇷
 📜 License
 
 This project is for educational and portfolio purposes.
+
