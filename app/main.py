@@ -17,7 +17,7 @@ app.include_router(animes.router)
 
 @app.on_event("startup")
 def on_startup():
-    auto_create_tables = os.getenv("AUTO_CREATE_TABLES", "false").lower() == "true"
+    auto_create_tables = os.getenv("AUTO_CREATE_TABLES", "true").lower() == "true"
     if not auto_create_tables:
         return
 

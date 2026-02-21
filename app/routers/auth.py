@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError, OperationalError
 from ..database import get_db
 from .. import schemas, crud
 from ..core.security import verify_password, create_access_token
@@ -11,8 +12,17 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
     if crud.get_user_by_username(db, user.username):
         raise HTTPException(status_code=400, detail="Username already registered")
-    
-    return crud.create_user(db, user)
+    if crud.get_user_by_email(db, user.email):
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    try:
+        return crud.create_user(db, user)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(status_code=400, detail="Username or email already registered")
+    except OperationalError:
+        db.rollback()
+        raise HTTPException(status_code=503, detail="Database unavailable")
 
 @router.post("/login")
 def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
