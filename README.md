@@ -14,9 +14,10 @@ Deploy em produção
 
 Estrutura escalável
 
-🚀 API online (Railway):
+🚀 API Online (Produção)
 
-🔗 anime-manager-api-production.up.railway.app/docs
+🔗 Swagger (Railway):
+https://anime-manager-api-production.up.railway.app/docs
 
 🧠 Sobre o Projeto
 
@@ -30,11 +31,34 @@ Cadastro de animes
 
 Listagem de animes
 
-Estrutura preparada para relacionamento usuário ↔ animes
+Exclusão de animes
 
-Deploy em ambiente de produção
+Deploy em ambiente de produção (Railway)
 
-Projeto desenvolvido aplicando boas práticas de backend moderno.
+Banco PostgreSQL em nuvem
+
+Projeto desenvolvido aplicando boas práticas modernas de backend.
+
+📸 Demonstração do Projeto
+🔥 1️⃣ API rodando em produção (Railway)
+
+✔ Aplicação iniciando
+✔ Uvicorn rodando
+✔ Deploy ativo
+✔ Logs funcionando
+
+🗄 2️⃣ Banco PostgreSQL em produção (Railway)
+
+✔ Tabela animes criada
+✔ Dados persistidos em nuvem
+✔ Integração API ↔ Banco funcionando
+
+📡 3️⃣ Endpoint funcionando via Swagger
+
+✔ Requisição autenticada
+✔ Token JWT via Authorization
+✔ Retorno 200 OK
+✔ Dados vindos do PostgreSQL
 
 🏗 Arquitetura do Projeto
 app/
@@ -53,14 +77,14 @@ Models (SQLAlchemy)
 
 Schemas (Pydantic)
 
-Routers (separação por domínio)
+Routers (Separação por domínio)
 
-Database connection
+Database Connection
 
 Configuração via variáveis de ambiente
 
 🛠 Stack Tecnológica
-Backend
+🔹 Backend
 
 Python
 
@@ -72,11 +96,11 @@ Pydantic
 
 JWT Authentication
 
-Banco de Dados
+🔹 Banco de Dados
 
-PostgreSQL
+PostgreSQL (Railway)
 
-DevOps
+🔹 DevOps
 
 Docker
 
@@ -84,7 +108,7 @@ Docker Compose
 
 Railway (Deploy)
 
-Versionamento
+🔹 Versionamento
 
 Git
 
@@ -94,11 +118,13 @@ GitHub
 
 Hash de senha
 
-Autenticação via JWT
+Autenticação JWT
 
-Separação de schemas para entrada e saída
+Proteção de rotas com Bearer Token
 
-Variáveis de ambiente para dados sensíveis
+Variáveis de ambiente (.env)
+
+Separação de schemas (input/output)
 
 📦 Modelos Principais
 👤 User
@@ -130,7 +156,7 @@ Client (Web/Mobile)
         ↓
    SQLAlchemy ORM
         ↓
-   PostgreSQL (Railway)
+ PostgreSQL (Railway Cloud)
 ▶️ Executar Localmente
 1️⃣ Clonar repositório
 git clone https://github.com/Erik02T/anime-manager-api.git
@@ -141,12 +167,10 @@ source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate     # Windows
 3️⃣ Instalar dependências
 pip install -r requirements.txt
-4️⃣ Configurar variáveis de ambiente
-
-Criar arquivo .env:
-
+4️⃣ Criar arquivo .env
 DATABASE_URL=postgresql://user:password@localhost:5432/anime_db
 SECRET_KEY=sua_chave_super_secreta
+AUTO_CREATE_TABLES=true
 5️⃣ Rodar aplicação
 uvicorn app.main:app --reload
 🐳 Rodar com Docker
@@ -154,58 +178,70 @@ docker-compose -f docker-compose.dev.yml up --build
 📡 Endpoints Principais
 🔐 Auth
 
-POST /register
+POST /auth/register
 
-POST /login
+POST /auth/login
 
 🎬 Animes
 
-POST /animes
+POST /animes/
 
-GET /animes
+GET /animes/
+
+DELETE /animes/{anime_id}
 
 📊 Diferenciais do Projeto
 
-✔ Estrutura organizada
-✔ Separação de responsabilidades
-✔ Banco relacional real
-✔ Deploy em produção
-✔ Containerização
+✔ API em produção real
+✔ Banco PostgreSQL em nuvem
+✔ Autenticação JWT
+✔ Estrutura profissional
+✔ Containerização com Docker
+✔ Deploy automatizado
+✔ Logs monitorados
 ✔ Preparado para integração mobile
 
 🎯 Objetivo
 
-Este projeto faz parte da minha jornada como desenvolvedor backend, aplicando conceitos como:
+Este projeto demonstra minha capacidade de:
 
-APIs REST
+Criar APIs REST completas
 
-Segurança
+Estruturar backend profissional
 
-Banco relacional
+Trabalhar com banco relacional real
 
-Deploy em cloud
+Implementar autenticação segura
 
-Estrutura profissional de projeto
+Fazer deploy em cloud
+
+Utilizar Docker em ambiente real
 
 👨‍💻 Autor
 
 Erik Sant
-Backend Developer em formação
+Backend Developer
 Foco em Python, APIs REST e arquitetura escalável
 
-GitHub: https://github.com/Erik02T
+GitHub:
+https://github.com/Erik02T
 
 📈 Próximas Melhorias
 
 Relacionamento User ↔ Anime
 
-Testes automatizados
+Testes automatizados (Pytest)
 
-CI/CD
-
-Documentação Swagger aprimorada
-
-Sistema de favoritos
+CI/CD Pipeline
 
 Paginação
 
+Sistema de favoritos
+
+Rate limiting
+
+Logs estruturados
+
+Monitoramento![WhatsApp Image 2026-02-21 at 1 38 29 PM](https://github.com/user-attachments/assets/601eba3b-54cb-49ec-81e6-651126087b30)
+![WhatsApp Image 2026-02-21 at 1 37 12 PM](https://github.com/user-attachments/assets/be3b51bf-a0ea-4598-8b1b-d8fea1a7d400)
+![WhatsApp Image 2026-02-21 at 1 32 47 PM](https://github.com/user-attachments/assets/740727c2-5ff5-4952-b291-f114255e6568)
