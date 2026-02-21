@@ -51,3 +51,16 @@ def read_animes(
     db: Session = Depends(get_db),
 ):
     return db.query(models.Anime).all()
+
+@router.delete("/{anime_id}")
+def delete_anime(
+    anime_id: int,
+    _username: str = Depends(require_token),
+    db: Session = Depends(get_db),
+):
+    anime = db.query(models.Anime).filter(models.Anime.id == anime_id).first()
+    if not anime:
+        raise HTTPException(status_code=404, detail="Anime not found")
+    db.delete(anime)
+    db.commit()
+    return {"detail": "Anime deleted"}
