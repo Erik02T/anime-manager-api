@@ -12,6 +12,11 @@ from fastapi.middleware.cors import CORSMiddleware
 logger = logging.getLogger(__name__)
 app = FastAPI()
 
+origins = [
+    "http://localhost:5500",
+    "https://SEU-FRONTEND.vercel.app",  # depois vamos usar isso
+]
+
 app.include_router(auth.router)
 app.include_router(animes.router)
 
