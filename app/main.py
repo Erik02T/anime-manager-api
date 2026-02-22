@@ -7,6 +7,7 @@ from sqlalchemy.exc import OperationalError
 from .database import engine
 from . import models
 from .routers import animes, auth
+from fastapi.middleware.cors import CORSMiddleware
 
 logger = logging.getLogger(__name__)
 app = FastAPI()
@@ -14,6 +15,13 @@ app = FastAPI()
 app.include_router(auth.router)
 app.include_router(animes.router)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # pode usar ["*"] temporariamente
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 def on_startup():
