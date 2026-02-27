@@ -1,38 +1,17 @@
-import jwt
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import models, schemas
-from ..core.config import ALGORITHM, SECRET_KEY
+from ..core.auth import get_current_user
+from ..core.cache import cache_store
 from ..database import get_db
 
 router = APIRouter(prefix="/animes", tags=["Animes"])
-security = HTTPBearer()
-
-
-def require_token(credentials: HTTPAuthorizationCredentials = Depends(security)) -> str:
-    token = credentials.credentials
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    except jwt.PyJWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token",
-        )
-
-    username = payload.get("sub")
-    if not username:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token payload",
-        )
-    return username
 
 
 @router.post("/")
 def create_anime(
     anime: schemas.AnimeCreate,
-    _username: str = Depends(require_token),
+    _current_user=Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     db_anime = models.Anime(
@@ -43,11 +22,12 @@ def create_anime(
     db.add(db_anime)
     db.commit()
     db.refresh(db_anime)
+    cache_store.invalidate("stats:global")
     return db_anime
 
 @router.get("/")
 def read_animes(
-    _username: str = Depends(require_token),
+    _current_user=Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     return db.query(models.Anime).all()
@@ -55,7 +35,7 @@ def read_animes(
 @router.delete("/{anime_id}")
 def delete_anime(
     anime_id: int,
-    _username: str = Depends(require_token),
+    _current_user=Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     anime = db.query(models.Anime).filter(models.Anime.id == anime_id).first()
@@ -63,4 +43,6 @@ def delete_anime(
         raise HTTPException(status_code=404, detail="Anime not found")
     db.delete(anime)
     db.commit()
+    cache_store.invalidate("stats:global")
+    cache_store.invalidate_prefix("stats:user:")
     return {"detail": "Anime deleted"}

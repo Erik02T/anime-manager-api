@@ -5,6 +5,7 @@ __pycache__/
 *.pyd
 .env
 .env.*
+*.db
 test.db
 anime.db
 postgres_data/

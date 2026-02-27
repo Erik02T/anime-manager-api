@@ -12,6 +12,7 @@ if str(ROOT_DIR) not in sys.path:
 
 from app.database import Base, get_db
 from app.main import app
+from app.core import rate_limit
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
@@ -42,3 +43,13 @@ app.dependency_overrides[get_db] = override_get_db
 def client():
     with TestClient(app) as c:
         yield c
+
+
+@pytest.fixture(autouse=True)
+def reset_rate_limits():
+    rate_limit.rate_limiter._hits.clear()
+    if rate_limit.redis_client is not None:
+        for pattern in ("auth:*", "social:*", "*auth*", "*social*"):
+            keys = rate_limit.redis_client.keys(pattern)
+            if keys:
+                rate_limit.redis_client.delete(*keys)
