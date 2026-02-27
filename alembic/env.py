@@ -1,7 +1,13 @@
+import sys
+from pathlib import Path
 from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
+
+# adiciona raiz do projeto no PYTHONPATH
+BASE_DIR = Path(__file__).resolve().parents[1]
+sys.path.append(str(BASE_DIR))
 
 from app.core.config import settings
 from app.models import Base
