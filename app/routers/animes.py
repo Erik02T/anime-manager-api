@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import models, schemas
 from ..core.auth import get_current_user
+from ..core.permissions import require_roles
 from ..core.cache import cache_store
 from ..database import get_db
 
@@ -35,7 +36,7 @@ def read_animes(
 @router.delete("/{anime_id}")
 def delete_anime(
     anime_id: int,
-    _current_user=Depends(get_current_user),
+    _admin=Depends(require_roles("admin")),
     db: Session = Depends(get_db),
 ):
     anime = db.query(models.Anime).filter(models.Anime.id == anime_id).first()
