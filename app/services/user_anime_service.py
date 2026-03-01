@@ -6,6 +6,7 @@ Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necess
 """
 
 from fastapi import HTTPException
+from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm import Session
 
@@ -24,8 +25,8 @@ class UserAnimeService:
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
 
-        anime = db.query(models.Anime).filter(models.Anime.id == payload.anime_id).first()
-        if not anime:
+        anime_exists = self._anime_exists(db, payload.anime_id)
+        if not anime_exists:
             raise HTTPException(status_code=404, detail="Anime not found")
 
         existing = self.repository.get_by_user_and_anime(db, payload.user_id, payload.anime_id)
@@ -75,8 +76,8 @@ class UserAnimeService:
             )
 
         if payload.episodes_watched is not None or payload.episodes_increment is not None:
-            anime = db.query(models.Anime).filter(models.Anime.id == entry.anime_id).first()
-            if not anime:
+            total_episodes = self._get_total_episodes(db, entry.anime_id)
+            if total_episodes is None:
                 raise HTTPException(status_code=404, detail="Anime not found")
 
             if payload.episodes_watched is not None:
@@ -84,7 +85,7 @@ class UserAnimeService:
             else:
                 new_progress = entry.episodes_watched + payload.episodes_increment
 
-            if anime.episodes is not None and new_progress > anime.episodes:
+            if total_episodes is not None and new_progress > total_episodes:
                 raise HTTPException(
                     status_code=400,
                     detail="Episodes watched cannot exceed total anime episodes",
@@ -111,6 +112,44 @@ class UserAnimeService:
     def _invalidate_stats_cache(self, user_id: int):
         cache_store.invalidate(f"stats:user:{user_id}")
         cache_store.invalidate("stats:global")
+
+    def _anime_exists(self, db: Session, anime_id: int) -> bool:
+        try:
+            anime = db.query(models.Anime).filter(models.Anime.id == anime_id).first()
+            return anime is not None
+        except OperationalError:
+            db.rollback()
+            for table_name in ("animes", "anime"):
+                try:
+                    row = db.execute(
+                        text(f"SELECT id FROM {table_name} WHERE id = :anime_id LIMIT 1"),
+                        {"anime_id": anime_id},
+                    ).first()
+                    if row:
+                        return True
+                except Exception:
+                    db.rollback()
+            return False
+
+    def _get_total_episodes(self, db: Session, anime_id: int) -> int | None:
+        try:
+            anime = db.query(models.Anime).filter(models.Anime.id == anime_id).first()
+            return anime.episodes if anime else None
+        except OperationalError:
+            db.rollback()
+            for table_name in ("animes", "anime"):
+                try:
+                    row = db.execute(
+                        text(f"SELECT episodes FROM {table_name} WHERE id = :anime_id LIMIT 1"),
+                        {"anime_id": anime_id},
+                    ).first()
+                    if row is not None:
+                        mapping = row._mapping if hasattr(row, "_mapping") else row
+                        value = mapping.get("episodes")
+                        return int(value) if value is not None else None
+                except Exception:
+                    db.rollback()
+            return None
 
 
 
