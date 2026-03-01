@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/core/logging.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\core\logging.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 import json
 import logging
@@ -42,6 +40,7 @@ def configure_logging() -> None:
     handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(JsonFormatter())
     root.addHandler(handler)
+
 
 
 

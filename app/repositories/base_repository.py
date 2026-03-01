@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/repositories/base_repository.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\repositories\base_repository.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from typing import Generic, Optional, Type, TypeVar
 
@@ -24,6 +22,7 @@ class BaseRepository(Generic[ModelType]):
         db.commit()
         db.refresh(obj)
         return obj
+
 
 
 

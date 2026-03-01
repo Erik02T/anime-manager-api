@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/core/security.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\core\security.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from datetime import datetime, timedelta
 
@@ -36,6 +34,7 @@ def create_access_token(data: dict):
         }
     )
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+
 
 
 

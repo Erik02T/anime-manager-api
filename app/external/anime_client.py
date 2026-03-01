@@ -1,14 +1,7 @@
-"""Camada External Client (Jikan).
-
-Responsabilidade:
-- Consumir API externa de anime (Jikan).
-- Aplicar retry/backoff, cache e mapeamento para formato interno.
-
-Dependências usadas:
-- httpx para chamadas HTTP
-- cache_store para reduzir latência/custo de requisição
-- settings para timeout/retry/base URL
-"""
+﻿# Arquivo: backend/backend\app\external\anime_client.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 import httpx
 import time
@@ -20,7 +13,7 @@ from app.core.config import settings
 
 class JikanAnimeClient:
     def __init__(self):
-        # Configuração centralizada via variáveis de ambiente.
+        # ConfiguraÃ§Ã£o centralizada via variÃ¡veis de ambiente.
         self.base_url = settings.JIKAN_BASE_URL.rstrip("/")
         self.timeout = settings.EXTERNAL_API_TIMEOUT_SECONDS
         self.cache_ttl = settings.EXTERNAL_CACHE_TTL_SECONDS
@@ -56,7 +49,7 @@ class JikanAnimeClient:
         return mapped
 
     def fetch_top_anime(self, limit: int = 25) -> list[dict]:
-        # Ranking de popularidade geral para vitrine/recomendação.
+        # Ranking de popularidade geral para vitrine/recomendaÃ§Ã£o.
         cache_key = f"external:jikan:top:{limit}"
         cached = cache_store.get(cache_key)
         if cached is not None:
@@ -68,7 +61,7 @@ class JikanAnimeClient:
         return mapped
 
     def fetch_current_season(self, limit: int = 25) -> list[dict]:
-        # Temporada atual para captar títulos em destaque e lançamentos correntes.
+        # Temporada atual para captar tÃ­tulos em destaque e lanÃ§amentos correntes.
         cache_key = f"external:jikan:season-now:{limit}"
         cached = cache_store.get(cache_key)
         if cached is not None:
@@ -80,7 +73,7 @@ class JikanAnimeClient:
         return mapped
 
     def fetch_upcoming(self, limit: int = 20) -> list[dict]:
-        # Próximos lançamentos para feed de notícias.
+        # PrÃ³ximos lanÃ§amentos para feed de notÃ­cias.
         cache_key = f"external:jikan:upcoming:{limit}"
         cached = cache_store.get(cache_key)
         if cached is not None:
@@ -92,7 +85,7 @@ class JikanAnimeClient:
         return mapped
 
     def fetch_season_catalog(self, year: int, season: str, pages: int = 1) -> list[dict]:
-        # Ingestão por temporada/ano para importação de catálogos históricos.
+        # IngestÃ£o por temporada/ano para importaÃ§Ã£o de catÃ¡logos histÃ³ricos.
         safe_pages = max(1, min(pages, 10))
         cache_key = f"external:jikan:season:{year}:{season}:{safe_pages}"
         cached = cache_store.get(cache_key)
@@ -172,3 +165,4 @@ class JikanAnimeClient:
             return datetime.fromisoformat(value.replace("Z", "+00:00"))
         except Exception:
             return None
+

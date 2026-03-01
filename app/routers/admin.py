@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/routers/admin.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\routers\admin.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy import inspect
@@ -77,6 +75,7 @@ def sync_animes(
     service = AnimeImportService()
     synced_count = service.sync_catalog(db, limit=limit)
     return {"synced_count": synced_count}
+
 
 
 

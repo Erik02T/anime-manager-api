@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/routers/auth.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\routers\auth.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -38,6 +36,7 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
 @router.get("/me", response_model=schemas.UserRead)
 def me(current_user=Depends(get_current_user)):
     return current_user
+
 
 
 

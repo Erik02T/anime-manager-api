@@ -1,14 +1,7 @@
-"""Camada Router (AI).
-
-Responsabilidade:
-- Expor endpoints HTTP para funcionalidades inteligentes do produto.
-- Validar autorização/acesso e delegar regras de negócio para AIService.
-
-Dependências usadas:
-- FastAPI (roteamento/deps)
-- AIService (recomendação/notícias/automação)
-- Auth/Permissions (escopo do usuário e regras admin)
-"""
+﻿# Arquivo: backend/backend\app\routers\ai.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from datetime import datetime
 
@@ -93,3 +86,4 @@ def auto_status_all(
 ):
     service = AIService()
     return service.auto_update_statuses_all_users(db)
+

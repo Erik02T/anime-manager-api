@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/tests/conftest.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\tests\conftest.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 import sys
 from pathlib import Path
@@ -60,6 +58,7 @@ def reset_rate_limits():
             keys = rate_limit.redis_client.keys(pattern)
             if keys:
                 rate_limit.redis_client.delete(*keys)
+
 
 
 

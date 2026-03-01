@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/tests/integration/test_api_container.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\tests\integration\test_api_container.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 import os
 
@@ -21,6 +19,7 @@ def test_healthcheck_in_container():
     response = requests.get(f"{BASE_URL}/health", timeout=10)
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
+
 
 
 

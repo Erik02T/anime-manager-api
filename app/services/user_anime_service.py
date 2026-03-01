@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/services/user_anime_service.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\services\user_anime_service.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from fastapi import HTTPException
 from sqlalchemy import text
@@ -150,6 +148,7 @@ class UserAnimeService:
                 except Exception:
                     db.rollback()
             return None
+
 
 
 

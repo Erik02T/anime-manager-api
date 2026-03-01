@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/tests/test_external_client.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\tests\test_external_client.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 import httpx
 
@@ -55,6 +53,7 @@ def test_jikan_client_retries_on_429(monkeypatch):
     data = client.fetch_anime(1)
     assert data["title"] == "Test Anime"
     assert calls["count"] == 2
+
 
 
 

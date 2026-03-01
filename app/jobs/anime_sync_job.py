@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/jobs/anime_sync_job.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\jobs\anime_sync_job.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 import asyncio
 import logging
@@ -40,6 +38,7 @@ async def anime_sync_loop() -> None:
             db.close()
 
         await asyncio.sleep(interval_seconds)
+
 
 
 

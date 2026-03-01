@@ -1,16 +1,21 @@
+﻿# Arquivo: backend/backend\app\services\ai_service.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+
 from __future__ import annotations
 
 """Camada Service (AI).
 
 Responsabilidade:
-- Centralizar a lógica de recomendação e automação de status.
-- Fazer ingestão de tendências/lançamentos para manter catálogo vivo.
-- Transformar sinais de comportamento do usuário em ranking útil.
+- Centralizar a lÃ³gica de recomendaÃ§Ã£o e automaÃ§Ã£o de status.
+- Fazer ingestÃ£o de tendÃªncias/lanÃ§amentos para manter catÃ¡logo vivo.
+- Transformar sinais de comportamento do usuÃ¡rio em ranking Ãºtil.
 
-Dependências usadas:
-- models/schemas (domínio e contrato de resposta)
+DependÃªncias usadas:
+- models/schemas (domÃ­nio e contrato de resposta)
 - JikanAnimeClient (fonte externa de dados)
-- SQLAlchemy Session (persistência/transações)
+- SQLAlchemy Session (persistÃªncia/transaÃ§Ãµes)
 """
 
 from datetime import datetime, timezone
@@ -29,7 +34,7 @@ class AIService:
         self.client = client or JikanAnimeClient()
 
     def ingest_trending_catalog(self, db: Session, limit: int = 40) -> int:
-        # Ingestão incremental: top + temporada atual, criando/atualizando registros locais.
+        # IngestÃ£o incremental: top + temporada atual, criando/atualizando registros locais.
         top = self.client.fetch_top_anime(limit=limit)
         season = self.client.fetch_current_season(limit=limit)
         inserted_or_updated = 0
@@ -81,7 +86,7 @@ class AIService:
                 try:
                     items = self.client.fetch_season_catalog(year, season, pages=pages_per_season)
                 except Exception:
-                    # Mantém robustez da operação em lote: segue para próximo bloco.
+                    # MantÃ©m robustez da operaÃ§Ã£o em lote: segue para prÃ³ximo bloco.
                     continue
                 inserted_or_updated += self._upsert_catalog_items(db, items)
 
@@ -94,7 +99,7 @@ class AIService:
         )
 
     def recommend_for_user(self, db: Session, user_id: int, limit: int = 20) -> list[schemas.RecommendationRead]:
-        # Ranking híbrido por afinidade de gêneros, popularidade e score externo.
+        # Ranking hÃ­brido por afinidade de gÃªneros, popularidade e score externo.
         self._ensure_catalog_seed(db)
 
         user_entries = (
@@ -127,7 +132,7 @@ class AIService:
         ]
 
     def get_news_feed(self, limit: int = 10) -> list[schemas.NewsItemRead]:
-        # Feed de novidades orientado a lançamentos futuros (upcoming).
+        # Feed de novidades orientado a lanÃ§amentos futuros (upcoming).
         items = self.client.fetch_upcoming(limit=limit)
         feed: list[schemas.NewsItemRead] = []
         for item in items[: max(1, min(limit, 50))]:
@@ -144,8 +149,8 @@ class AIService:
         return feed
 
     def auto_update_statuses(self, db: Session, user_id: int) -> schemas.AutoStatusResult:
-        # Automação por regra simples:
-        # - progresso >= episódios => completed
+        # AutomaÃ§Ã£o por regra simples:
+        # - progresso >= episÃ³dios => completed
         # - progresso > 0 e planned/on_hold => watching
         entries = (
             db.query(models.UserAnime)
@@ -182,7 +187,7 @@ class AIService:
         return schemas.AutoStatusResult(updated_count=total, details=details[:200])
 
     def _extract_preferred_genres(self, db: Session, entries: list[models.UserAnime]) -> dict[str, float]:
-        # Perfil do usuário com pesos por status + nota histórica.
+        # Perfil do usuÃ¡rio com pesos por status + nota histÃ³rica.
         genre_weights: dict[str, float] = {}
         for entry in entries:
             anime = db.query(models.Anime).filter(models.Anime.id == entry.anime_id).first()
@@ -206,8 +211,8 @@ class AIService:
         return genre_weights
 
     def _score_anime(self, anime: models.Anime, preferred_genres: dict[str, float]) -> tuple[float, str]:
-        # Score final normalizado para recomendação.
-        # Componentes: popularidade, nota externa, afinidade por gênero e frescor do catálogo.
+        # Score final normalizado para recomendaÃ§Ã£o.
+        # Componentes: popularidade, nota externa, afinidade por gÃªnero e frescor do catÃ¡logo.
         popularity = log10(max(10, (anime.members or 0) + 10)) / 6.0
         external_score = (anime.external_score or 0) / 10.0
         freshness = 0.0
@@ -277,3 +282,4 @@ class AIService:
         if safe_progress > 0 and current_status in {"planned", "on_hold"}:
             return "watching"
         return current_status
+

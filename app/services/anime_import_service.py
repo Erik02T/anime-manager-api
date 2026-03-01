@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/services/anime_import_service.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\services\anime_import_service.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from datetime import datetime, timezone
 
@@ -75,6 +73,7 @@ class AnimeImportService:
             except Exception:
                 db.rollback()
         return synced
+
 
 
 

@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/scripts/seed_data.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\scripts\seed_data.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from app import models
 from app.database import SessionLocal, engine
@@ -54,6 +52,7 @@ def run() -> None:
 
 if __name__ == "__main__":
     run()
+
 
 
 

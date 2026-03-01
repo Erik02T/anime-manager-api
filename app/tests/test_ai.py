@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/tests/test_ai.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\tests\test_ai.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from app.external.anime_client import JikanAnimeClient
 from app import models
@@ -165,6 +163,7 @@ def test_ai_import_catalog_range_service(monkeypatch):
         assert db.query(models.Anime).count() >= 4
     finally:
         db.close()
+
 
 
 

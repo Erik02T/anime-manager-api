@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/routers/user_animes.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\routers\user_animes.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
@@ -51,6 +49,7 @@ def update_user_anime(
 ):
     service = UserAnimeService()
     return service.update_user_anime(db, entry_id, payload, current_user.id)
+
 
 
 

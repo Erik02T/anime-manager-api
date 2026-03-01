@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/routers/users.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\routers\users.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -22,6 +20,7 @@ def get_user(user_id: int, db: Session = Depends(get_db), current_user=Depends(g
         raise HTTPException(status_code=403, detail="Not allowed")
     service = UserService()
     return service.get_user(db, user_id)
+
 
 
 

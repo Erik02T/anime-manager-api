@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/tests/test_user_animes.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\tests\test_user_animes.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 import uuid
 
@@ -199,6 +197,7 @@ def test_patch_user_anime_rejects_mixed_progress_modes(client):
     )
 
     assert patch_response.status_code == 400
+
 
 
 

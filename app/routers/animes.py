@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/routers/animes.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\routers\animes.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import text
@@ -171,6 +169,7 @@ def delete_anime(
             except Exception:
                 db.rollback()
         raise HTTPException(status_code=404, detail="Anime not found")
+
 
 
 

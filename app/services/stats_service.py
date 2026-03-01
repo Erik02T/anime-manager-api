@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/services/stats_service.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\services\stats_service.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
@@ -94,6 +92,7 @@ class StatsService:
         }
         cache_store.set(cache_key, result, ttl_seconds=120)
         return result
+
 
 
 

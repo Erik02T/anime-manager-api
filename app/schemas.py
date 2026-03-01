@@ -1,10 +1,15 @@
+﻿# Arquivo: backend/backend\app\schemas.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+
 from datetime import date, datetime
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 # Camada Schema:
-# Define contratos de entrada/saída da API (validação Pydantic + shape de resposta).
+# Define contratos de entrada/saÃ­da da API (validaÃ§Ã£o Pydantic + shape de resposta).
 # Arquivo usado por todas as camadas HTTP (routers/services/tests/frontend).
 
 
@@ -198,14 +203,14 @@ class ImportAnimeResult(BaseModel):
 
 
 class RecommendationRead(BaseModel):
-    # Resposta de recomendação já com score explicável.
+    # Resposta de recomendaÃ§Ã£o jÃ¡ com score explicÃ¡vel.
     anime: ReadAnime
     recommendation_score: float
     reason: str
 
 
 class NewsItemRead(BaseModel):
-    # Item de feed de notícias/lançamentos.
+    # Item de feed de notÃ­cias/lanÃ§amentos.
     source: str
     title: str
     url: str | None = None
@@ -215,7 +220,7 @@ class NewsItemRead(BaseModel):
 
 
 class AutoStatusResult(BaseModel):
-    # Resultado de automação de status com trilha de alterações.
+    # Resultado de automaÃ§Ã£o de status com trilha de alteraÃ§Ãµes.
     updated_count: int
     details: list[str]
 
@@ -226,3 +231,4 @@ class CatalogImportRangeResult(BaseModel):
     seasons: list[str]
     pages_per_season: int
     inserted_or_updated: int
+

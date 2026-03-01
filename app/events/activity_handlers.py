@@ -1,9 +1,7 @@
-﻿"""
-Arquivo: backend/app/events/activity_handlers.py
-Camada: Module
-Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
-Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
-"""
+﻿# Arquivo: backend/backend\app\events\activity_handlers.py
+# Camada: Module
+# Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+# Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
 
 from sqlalchemy.orm import Session
 
@@ -33,6 +31,7 @@ def register_activity_handlers() -> None:
         return
     event_bus.subscribe("activity.created", _persist_activity)
     _registered = True
+
 
 
 
