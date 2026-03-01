@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/repositories/social_repository.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
@@ -79,3 +86,6 @@ class SocialRepository:
 
     def get_following_count(self, db: Session, user_id: int):
         return db.query(func.count(models.Follow.id)).filter(models.Follow.follower_id == user_id).scalar()
+
+
+

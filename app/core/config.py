@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/core/config.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from pydantic_settings import BaseSettings
 from pydantic import ConfigDict, model_validator
 
@@ -37,3 +44,6 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+

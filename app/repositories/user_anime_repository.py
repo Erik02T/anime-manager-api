@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/repositories/user_anime_repository.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from sqlalchemy.orm import Session
 
 from app import models
@@ -54,3 +61,6 @@ class UserAnimeRepository(BaseRepository[models.UserAnime]):
         db.commit()
         db.refresh(entry)
         return entry
+
+
+

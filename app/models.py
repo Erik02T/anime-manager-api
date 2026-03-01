@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/models.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from datetime import datetime
 
 from sqlalchemy import (
@@ -125,3 +132,6 @@ class Activity(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
 
     user = relationship("User", back_populates="activities")
+
+
+

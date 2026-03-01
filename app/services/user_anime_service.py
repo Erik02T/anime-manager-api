@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/services/user_anime_service.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm import Session
@@ -104,3 +111,6 @@ class UserAnimeService:
     def _invalidate_stats_cache(self, user_id: int):
         cache_store.invalidate(f"stats:user:{user_id}")
         cache_store.invalidate("stats:global")
+
+
+

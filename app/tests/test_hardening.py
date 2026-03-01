@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/tests/test_hardening.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 import uuid
 
 import jwt
@@ -44,3 +51,6 @@ def test_auth_rate_limit_returns_429(client):
 
     blocked = client.post("/auth/login", json={"username": username, "password": password})
     assert blocked.status_code == 429
+
+
+

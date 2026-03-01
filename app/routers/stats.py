@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/routers/stats.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -28,3 +35,6 @@ def get_global_stats(
 ):
     service = StatsService()
     return service.get_global_stats(db)
+
+
+

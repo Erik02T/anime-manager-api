@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/tests/test_animes.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 def get_token(client):
     client.post(
         "/auth/register",
@@ -35,3 +42,6 @@ def test_create_anime_authenticated(client):
 
     assert response.status_code == 200
     assert response.json()["title"] == "Naruto"
+
+
+

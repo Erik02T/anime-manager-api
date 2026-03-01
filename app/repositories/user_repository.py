@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/repositories/user_repository.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from sqlalchemy.orm import Session
 
 from app import models
@@ -30,3 +37,6 @@ class UserRepository(BaseRepository[models.User]):
             role=role,
         )
         return self.add(db, db_user)
+
+
+

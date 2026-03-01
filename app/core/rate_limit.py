@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/core/rate_limit.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 import threading
 import time
 from collections import defaultdict, deque
@@ -74,3 +81,6 @@ def limit_requests(scope: str, limit_per_minute: int):
         rate_limiter.check(local_key, limit_per_minute, 60)
 
     return dependency
+
+
+

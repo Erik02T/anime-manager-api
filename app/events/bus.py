@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/events/bus.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from collections import defaultdict
 from typing import Callable
 
@@ -15,3 +22,6 @@ class EventBus:
 
 
 event_bus = EventBus()
+
+
+

@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/routers/social.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
@@ -105,3 +112,6 @@ def get_dashboard(
         activity_limit=activity_limit,
         activity_offset=activity_offset,
     )
+
+
+

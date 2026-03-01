@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/tests/test_social.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 import uuid
 
 
@@ -81,3 +88,6 @@ def test_social_review_feed_and_dashboard(client):
     dashboard = dashboard_response.json()
     assert dashboard["followers_count"] >= 1
     assert "user_stats" in dashboard
+
+
+

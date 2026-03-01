@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/repositories/stats_repository.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from sqlalchemy import case, desc, func
 from sqlalchemy.orm import Session
 
@@ -94,3 +101,6 @@ class StatsRepository:
             .order_by(desc("value"))
             .first()
         )
+
+
+

@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/tests/test_security.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 import uuid
 
 from app import models
@@ -79,3 +86,6 @@ def test_admin_role_enforced_and_metrics_available(client):
     metrics_response = client.get("/metrics")
     assert metrics_response.status_code == 200
     assert "anime_manager_http_requests_total" in metrics_response.text
+
+
+

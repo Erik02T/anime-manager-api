@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/tests/test_import_anime.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 import uuid
 
 from app import models
@@ -79,3 +86,6 @@ def test_admin_sync_animes_manual_trigger(client, monkeypatch):
     sync_response = client.post("/admin/sync-animes?limit=10", headers=headers)
     assert sync_response.status_code == 200
     assert sync_response.json()["synced_count"] >= 1
+
+
+

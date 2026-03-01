@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/core/cache.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 import threading
 import time
 import json
@@ -73,3 +80,6 @@ class CacheStore:
 
 
 cache_store = CacheStore()
+
+
+

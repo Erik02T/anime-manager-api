@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/database.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
@@ -32,3 +39,6 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+

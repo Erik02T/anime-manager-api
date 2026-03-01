@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/main.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 import logging
 import time
 import uuid
@@ -142,3 +149,6 @@ app.include_router(stats.router)
 app.include_router(social.router)
 app.include_router(admin.router)
 app.include_router(ai.router)
+
+
+

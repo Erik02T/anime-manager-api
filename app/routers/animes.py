@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/routers/animes.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import models, schemas
@@ -47,3 +54,6 @@ def delete_anime(
     cache_store.invalidate("stats:global")
     cache_store.invalidate_prefix("stats:user:")
     return {"detail": "Anime deleted"}
+
+
+

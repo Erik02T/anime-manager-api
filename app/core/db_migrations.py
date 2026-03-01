@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/core/db_migrations.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 from logging import Logger
 
 from sqlalchemy import inspect, text
@@ -58,3 +65,6 @@ def apply_runtime_migrations(engine: Engine, logger: Logger) -> None:
             if "ix_animes_last_synced_at" not in anime_indexes:
                 connection.execute(text("CREATE INDEX IF NOT EXISTS ix_animes_last_synced_at ON animes (last_synced_at)"))
                 logger.info("migration.applied", extra={"migration": "animes.ix_last_synced_at.added"})
+
+
+

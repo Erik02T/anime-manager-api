@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/tests/test_stats.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 import uuid
 
 
@@ -87,3 +94,6 @@ def test_global_stats(client):
     assert len(payload["average_scores"]) >= 2
     assert payload["most_watched"] is not None
     assert payload["best_rated"] is not None
+
+
+

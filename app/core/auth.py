@@ -1,3 +1,10 @@
+﻿"""
+Arquivo: backend/app/core/auth.py
+Camada: Module
+Objetivo: Define responsabilidades deste modulo e sua funcao no sistema.
+Dependencias: FastAPI/SQLAlchemy/Pydantic e utilitarios internos conforme necessario.
+"""
+
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -43,3 +50,6 @@ def get_current_user(
             detail="User not found for token",
         )
     return user
+
+
+
