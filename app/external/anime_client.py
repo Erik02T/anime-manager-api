@@ -1,5 +1,18 @@
+"""Camada External Client (Jikan).
+
+Responsabilidade:
+- Consumir API externa de anime (Jikan).
+- Aplicar retry/backoff, cache e mapeamento para formato interno.
+
+Dependências usadas:
+- httpx para chamadas HTTP
+- cache_store para reduzir latência/custo de requisição
+- settings para timeout/retry/base URL
+"""
+
 import httpx
 import time
+from datetime import datetime
 
 from app.core.cache import cache_store
 from app.core.config import settings
@@ -7,6 +20,7 @@ from app.core.config import settings
 
 class JikanAnimeClient:
     def __init__(self):
+        # Configuração centralizada via variáveis de ambiente.
         self.base_url = settings.JIKAN_BASE_URL.rstrip("/")
         self.timeout = settings.EXTERNAL_API_TIMEOUT_SECONDS
         self.cache_ttl = settings.EXTERNAL_CACHE_TTL_SECONDS
@@ -14,6 +28,7 @@ class JikanAnimeClient:
         self.backoff_seconds = settings.EXTERNAL_API_BACKOFF_SECONDS
 
     def fetch_anime(self, mal_id: int) -> dict:
+        # Detalhes completos de um anime por MAL ID (rota /anime/{id}/full).
         cache_key = f"external:jikan:anime:{mal_id}"
         cached = cache_store.get(cache_key)
         if cached is not None:
@@ -39,6 +54,57 @@ class JikanAnimeClient:
         }
         cache_store.set(cache_key, mapped, ttl_seconds=self.cache_ttl)
         return mapped
+
+    def fetch_top_anime(self, limit: int = 25) -> list[dict]:
+        # Ranking de popularidade geral para vitrine/recomendação.
+        cache_key = f"external:jikan:top:{limit}"
+        cached = cache_store.get(cache_key)
+        if cached is not None:
+            return cached
+
+        payload = self._get_with_retry(f"{self.base_url}/top/anime?limit={max(1, min(limit, 50))}&sfw=true")
+        mapped = [self._map_catalog_item(item) for item in (payload.get("data") or [])]
+        cache_store.set(cache_key, mapped, ttl_seconds=self.cache_ttl)
+        return mapped
+
+    def fetch_current_season(self, limit: int = 25) -> list[dict]:
+        # Temporada atual para captar títulos em destaque e lançamentos correntes.
+        cache_key = f"external:jikan:season-now:{limit}"
+        cached = cache_store.get(cache_key)
+        if cached is not None:
+            return cached
+
+        payload = self._get_with_retry(f"{self.base_url}/seasons/now?limit={max(1, min(limit, 50))}&sfw=true")
+        mapped = [self._map_catalog_item(item) for item in (payload.get("data") or [])]
+        cache_store.set(cache_key, mapped, ttl_seconds=self.cache_ttl)
+        return mapped
+
+    def fetch_upcoming(self, limit: int = 20) -> list[dict]:
+        # Próximos lançamentos para feed de notícias.
+        cache_key = f"external:jikan:upcoming:{limit}"
+        cached = cache_store.get(cache_key)
+        if cached is not None:
+            return cached
+
+        payload = self._get_with_retry(f"{self.base_url}/seasons/upcoming?limit={max(1, min(limit, 50))}&sfw=true")
+        mapped = [self._map_catalog_item(item) for item in (payload.get("data") or [])]
+        cache_store.set(cache_key, mapped, ttl_seconds=self.cache_ttl)
+        return mapped
+
+    def _map_catalog_item(self, data: dict) -> dict:
+        return {
+            "mal_id": data.get("mal_id"),
+            "title": data.get("title") or "Unknown title",
+            "genre": ", ".join([g.get("name") for g in (data.get("genres") or []) if g.get("name")]) or "Unknown",
+            "episodes": data.get("episodes") or 0,
+            "external_score": self._normalize_score(data.get("score")),
+            "members": data.get("members"),
+            "external_status": data.get("status"),
+            "image_url": ((data.get("images") or {}).get("jpg") or {}).get("image_url"),
+            "synopsis": data.get("synopsis"),
+            "aired_from": self._parse_datetime((data.get("aired") or {}).get("from")),
+            "url": data.get("url"),
+        }
 
     def _get_with_retry(self, url: str) -> dict:
         with httpx.Client(timeout=self.timeout) as client:
@@ -71,5 +137,15 @@ class JikanAnimeClient:
             if normalized > 10:
                 return 10
             return int(normalized)
+        except Exception:
+            return None
+
+    @staticmethod
+    def _parse_datetime(value: str | None) -> datetime | None:
+        if not value:
+            return None
+        try:
+            # Jikan usually sends ISO with Z suffix.
+            return datetime.fromisoformat(value.replace("Z", "+00:00"))
         except Exception:
             return None

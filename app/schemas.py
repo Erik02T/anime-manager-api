@@ -3,6 +3,10 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
+# Camada Schema:
+# Define contratos de entrada/saída da API (validação Pydantic + shape de resposta).
+# Arquivo usado por todas as camadas HTTP (routers/services/tests/frontend).
+
 
 class UserCreate(BaseModel):
     username: str
@@ -191,3 +195,26 @@ class SchemaStatusRead(BaseModel):
 class ImportAnimeResult(BaseModel):
     anime: ReadAnime
     source: str
+
+
+class RecommendationRead(BaseModel):
+    # Resposta de recomendação já com score explicável.
+    anime: ReadAnime
+    recommendation_score: float
+    reason: str
+
+
+class NewsItemRead(BaseModel):
+    # Item de feed de notícias/lançamentos.
+    source: str
+    title: str
+    url: str | None = None
+    summary: str | None = None
+    published_at: datetime | None = None
+    category: str
+
+
+class AutoStatusResult(BaseModel):
+    # Resultado de automação de status com trilha de alterações.
+    updated_count: int
+    details: list[str]

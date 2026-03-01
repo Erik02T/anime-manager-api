@@ -18,7 +18,7 @@ from .core.logging import configure_logging
 from .database import engine
 from .events.activity_handlers import register_activity_handlers
 from .jobs.anime_sync_job import anime_sync_loop
-from .routers import admin, animes, auth, social, stats, user_animes, users
+from .routers import admin, ai, animes, auth, social, stats, user_animes, users
 
 configure_logging()
 logger = logging.getLogger(__name__)
@@ -86,6 +86,7 @@ app = FastAPI(
         {"name": "Stats", "description": "User and global ranking/statistics endpoints."},
         {"name": "Social", "description": "Reviews, comments, follows, feeds and dashboard."},
         {"name": "Admin", "description": "Role-protected administrative/audit endpoints."},
+        {"name": "AI", "description": "Recommendation engine, trends and automation endpoints."},
         {"name": "Health", "description": "Operational health endpoints."},
     ],
 )
@@ -140,3 +141,4 @@ app.include_router(user_animes.router)
 app.include_router(stats.router)
 app.include_router(social.router)
 app.include_router(admin.router)
+app.include_router(ai.router)
