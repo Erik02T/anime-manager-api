@@ -91,6 +91,29 @@ class JikanAnimeClient:
         cache_store.set(cache_key, mapped, ttl_seconds=self.cache_ttl)
         return mapped
 
+    def fetch_season_catalog(self, year: int, season: str, pages: int = 1) -> list[dict]:
+        # Ingestão por temporada/ano para importação de catálogos históricos.
+        safe_pages = max(1, min(pages, 10))
+        cache_key = f"external:jikan:season:{year}:{season}:{safe_pages}"
+        cached = cache_store.get(cache_key)
+        if cached is not None:
+            return cached
+
+        items: list[dict] = []
+        normalized_season = season.lower().strip()
+        for page in range(1, safe_pages + 1):
+            payload = self._get_with_retry(
+                f"{self.base_url}/seasons/{year}/{normalized_season}?page={page}&sfw=true"
+            )
+            page_items = [self._map_catalog_item(item) for item in (payload.get("data") or [])]
+            items.extend(page_items)
+            pagination = payload.get("pagination") or {}
+            if not pagination.get("has_next_page", False):
+                break
+
+        cache_store.set(cache_key, items, ttl_seconds=self.cache_ttl)
+        return items
+
     def _map_catalog_item(self, data: dict) -> dict:
         return {
             "mal_id": data.get("mal_id"),

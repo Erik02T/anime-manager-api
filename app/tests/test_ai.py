@@ -1,4 +1,7 @@
 from app.external.anime_client import JikanAnimeClient
+from app import models
+from app.services.ai_service import AIService
+from app.tests.conftest import TestingSessionLocal
 
 
 def create_user_and_token(client, suffix: str = "ai"):
@@ -108,3 +111,50 @@ def test_ai_recommendations_news_and_auto_status(client, monkeypatch):
     auto_status_response = client.post("/ai/auto-status", headers=headers)
     assert auto_status_response.status_code == 200
     assert auto_status_response.json()["updated_count"] >= 1
+
+
+def test_ai_import_catalog_range_service(monkeypatch):
+    def fake_season_catalog(_self, year: int, season: str, pages: int = 1):
+        return [
+            {
+                "mal_id": int(f"{year}{1 if season == 'winter' else 2}"),
+                "title": f"{season.title()} {year} Anime A",
+                "genre": "Action, Adventure",
+                "episodes": 12,
+                "external_score": 8,
+                "members": 1000,
+                "external_status": "Finished Airing",
+                "image_url": None,
+                "synopsis": "Synthetic catalog item A",
+            },
+            {
+                "mal_id": int(f"{year}{3 if season == 'winter' else 4}"),
+                "title": f"{season.title()} {year} Anime B",
+                "genre": "Fantasy",
+                "episodes": 24,
+                "external_score": 9,
+                "members": 2000,
+                "external_status": "Finished Airing",
+                "image_url": None,
+                "synopsis": "Synthetic catalog item B",
+            },
+        ]
+
+    monkeypatch.setattr(JikanAnimeClient, "fetch_season_catalog", fake_season_catalog)
+
+    db = TestingSessionLocal()
+    try:
+        service = AIService()
+        result = service.import_catalog_range(
+            db=db,
+            start_year=2000,
+            end_year=2000,
+            seasons=["winter", "spring"],
+            pages_per_season=1,
+        )
+        assert result.start_year == 2000
+        assert result.end_year == 2000
+        assert result.inserted_or_updated == 4
+        assert db.query(models.Anime).count() >= 4
+    finally:
+        db.close()

@@ -218,3 +218,11 @@ class AutoStatusResult(BaseModel):
     # Resultado de automação de status com trilha de alterações.
     updated_count: int
     details: list[str]
+
+
+class CatalogImportRangeResult(BaseModel):
+    start_year: int
+    end_year: int
+    seasons: list[str]
+    pages_per_season: int
+    inserted_or_updated: int

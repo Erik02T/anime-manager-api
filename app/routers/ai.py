@@ -10,6 +10,8 @@ Dependências usadas:
 - Auth/Permissions (escopo do usuário e regras admin)
 """
 
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
@@ -50,6 +52,29 @@ def refresh_catalog(
     service = AIService()
     count = service.ingest_trending_catalog(db, limit=limit)
     return {"updated": count}
+
+
+@router.post(
+    "/import-catalog-range",
+    response_model=schemas.CatalogImportRangeResult,
+    summary="Import historical catalog by year range and season",
+)
+def import_catalog_range(
+    start_year: int = Query(default=2000, ge=1960, le=2100),
+    end_year: int = Query(default=datetime.now().year, ge=1960, le=2100),
+    seasons: list[str] | None = Query(default=None),
+    pages_per_season: int = Query(default=1, ge=1, le=10),
+    _admin=Depends(require_roles("admin")),
+    db: Session = Depends(get_db),
+):
+    service = AIService()
+    return service.import_catalog_range(
+        db=db,
+        start_year=start_year,
+        end_year=end_year,
+        seasons=seasons,
+        pages_per_season=pages_per_season,
+    )
 
 
 @router.post("/auto-status", response_model=schemas.AutoStatusResult, summary="Auto-update user anime statuses")

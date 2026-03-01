@@ -17,6 +17,7 @@ from datetime import datetime, timezone
 from math import log10
 
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 
 from app import models, schemas
 from app.external.anime_client import JikanAnimeClient
@@ -56,6 +57,41 @@ class AIService:
 
         db.commit()
         return inserted_or_updated
+
+    def import_catalog_range(
+        self,
+        db: Session,
+        start_year: int,
+        end_year: int,
+        seasons: list[str] | None = None,
+        pages_per_season: int = 1,
+    ) -> schemas.CatalogImportRangeResult:
+        if start_year < 1900 or end_year > 2100 or start_year > end_year:
+            raise HTTPException(status_code=400, detail="Invalid year range")
+
+        selected_seasons = seasons or ["winter", "spring", "summer", "fall"]
+        normalized_seasons = [season.lower().strip() for season in selected_seasons]
+        for season in normalized_seasons:
+            if season not in {"winter", "spring", "summer", "fall"}:
+                raise HTTPException(status_code=400, detail=f"Invalid season: {season}")
+
+        inserted_or_updated = 0
+        for year in range(start_year, end_year + 1):
+            for season in normalized_seasons:
+                try:
+                    items = self.client.fetch_season_catalog(year, season, pages=pages_per_season)
+                except Exception:
+                    # Mantém robustez da operação em lote: segue para próximo bloco.
+                    continue
+                inserted_or_updated += self._upsert_catalog_items(db, items)
+
+        return schemas.CatalogImportRangeResult(
+            start_year=start_year,
+            end_year=end_year,
+            seasons=normalized_seasons,
+            pages_per_season=max(1, min(pages_per_season, 10)),
+            inserted_or_updated=inserted_or_updated,
+        )
 
     def recommend_for_user(self, db: Session, user_id: int, limit: int = 20) -> list[schemas.RecommendationRead]:
         # Ranking híbrido por afinidade de gêneros, popularidade e score externo.
@@ -204,6 +240,33 @@ class AIService:
         catalog_size = db.query(models.Anime).count()
         if catalog_size < 25:
             self.ingest_trending_catalog(db, limit=40)
+
+    def _upsert_catalog_items(self, db: Session, items: list[dict]) -> int:
+        count = 0
+        for item in items:
+            mal_id = item.get("mal_id")
+            if not mal_id:
+                continue
+
+            anime = db.query(models.Anime).filter(models.Anime.mal_id == mal_id).first()
+            if anime is None:
+                anime = models.Anime(mal_id=mal_id)
+                db.add(anime)
+
+            anime.title = item.get("title") or "Unknown title"
+            anime.genre = item.get("genre") or "Unknown"
+            anime.episodes = item.get("episodes") or 0
+            anime.external_score = item.get("external_score")
+            anime.members = item.get("members")
+            anime.external_status = item.get("external_status")
+            anime.image_url = item.get("image_url")
+            anime.synopsis = item.get("synopsis")
+            anime.last_synced_at = datetime.now(timezone.utc)
+            count += 1
+
+        if count:
+            db.commit()
+        return count
 
     @staticmethod
     def _infer_status(progress: int, episodes: int, current_status: str) -> str:
