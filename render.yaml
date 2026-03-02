@@ -19,3 +19,7 @@ services:
         value: "true"
       - key: ENVIRONMENT
         value: production
+      - key: ENABLE_RUNTIME_MIGRATIONS
+        value: "false"
+      - key: REQUIRE_ALEMBIC_IN_PRODUCTION
+        value: "true"

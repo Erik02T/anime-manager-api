@@ -1,23 +1,22 @@
-﻿# 🎌 Anime Manager API
+# Anime Manager API
 
-API RESTful para gerenciamento de animes com autenticação JWT, sistema social e integração com MyAnimeList via Jikan.
+REST API for anime tracking, social features, rankings, and external catalog sync (Jikan/MAL data).
 
-## 🚀 Features
-- Arquitetura em camadas (Router -> Service -> Repository)
-- JWT com `iss`/`aud`
-- RBAC (`admin`/`user`)
-- Rate limiting (Redis + fallback in-memory)
-- Feed social
-- Reviews e comentários
-- Estatísticas por usuário e globais
-- Integração externa com Jikan
-- Cache de dados externos
+## Features
+- Layered architecture (`Router -> Service -> Repository`)
+- JWT authentication with issuer/audience claims
+- Role-based authorization (`admin`, `user`)
+- Rate limiting (Redis with in-memory fallback)
+- Social feed, reviews, comments, and follows
+- User and global statistics
+- External catalog integration (Jikan API)
+- External data caching
 - Alembic migrations
-- Dockerized
-- CI com GitHub Actions
-- Metrics Prometheus (`/metrics`)
+- Docker support
+- CI with GitHub Actions
+- Prometheus metrics endpoint (`/metrics`)
 
-## 🧱 Arquitetura
+## Architecture
 ```text
 Client (Web/Mobile)
         |
@@ -40,22 +39,22 @@ External Catalog (Jikan API)
  Internal Anime Catalog
 ```
 
-## 📁 Estrutura
+## Project Structure
 ```text
 app/
   core/          # auth, config, cache, logging, permissions, rate limit
-  external/      # cliente da API externa
+  external/      # external API client
   events/        # event bus + handlers
-  jobs/          # jobs periódicos
-  repositories/  # acesso a dados
-  routers/       # endpoints HTTP
-  services/      # regras de negócio
-  tests/         # testes unitários/integrados
-alembic/         # migrations
+  jobs/          # scheduled jobs
+  repositories/  # data access layer
+  routers/       # HTTP endpoints
+  services/      # business logic
+  tests/         # unit/integration tests
+alembic/         # DB migrations
 ```
 
-## 🔐 Variáveis de ambiente
-Use `.env.example` como base.
+## Environment Variables
+Use `.env.example` as a base.
 
 ```env
 DATABASE_URL=postgresql://user:password@host:5432/db
@@ -66,35 +65,43 @@ REDIS_URL=redis://localhost:6379
 JIKAN_BASE_URL=https://api.jikan.moe/v4
 JWT_ISSUER=anime-manager
 JWT_AUDIENCE=anime-manager-users
+ENVIRONMENT=production
+ENABLE_RUNTIME_MIGRATIONS=false
+REQUIRE_ALEMBIC_IN_PRODUCTION=true
 ```
 
-## 🐳 Rodar localmente
+## Run Locally
 ```bash
 docker compose up --build
 ```
 
-## ☁ Deploy
-- Railway (app + PostgreSQL + Redis)
-- Start command em produção:
+## Deploy (Render)
+- Runtime: Python
+- Root directory: `backend`
+- Build command:
+```bash
+pip install -r requirements.txt
+```
+- Start command:
 ```bash
 uvicorn app.main:app --host 0.0.0.0 --port $PORT
 ```
 
-## 📊 Observabilidade
+## Observability
 - `GET /health`
 - `GET /metrics`
-- Logs estruturados JSON
+- Structured JSON logs
 
-## 🧪 Testes
+## Tests
 ```bash
 pytest -q -p no:cacheprovider
 ```
 
-## 🔄 Migrações
+## Migrations
 ```bash
 alembic upgrade head
 ```
 
-## 👤 Autor
-Erik Sant
-- GitHub: https://github.com/Erik02T
+## Author
+Erik Sant  
+GitHub: https://github.com/Erik02T

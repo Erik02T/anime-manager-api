@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     ANIME_SYNC_INTERVAL_MINUTES: int = 60
     EXTERNAL_API_MAX_RETRIES: int = 3
     EXTERNAL_API_BACKOFF_SECONDS: float = 0.5
-    ENABLE_RUNTIME_MIGRATIONS: bool = True
+    ENABLE_RUNTIME_MIGRATIONS: bool = False
     REQUIRE_ALEMBIC_IN_PRODUCTION: bool = True
 
     model_config = ConfigDict(env_file=".env", extra="ignore")
