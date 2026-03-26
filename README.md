@@ -2,6 +2,11 @@
 
 REST API for anime tracking, social features, rankings, and external catalog sync (Jikan/MAL data).
 
+## About
+Anime Manager API is the backend service that powers the Anime Manager platform. It is designed to provide a secure and maintainable foundation for user authentication, anime catalog management, personal tracking, social interactions, analytics, and external data ingestion.
+
+The project follows a layered architecture to keep HTTP concerns, business rules, data access, and infrastructure responsibilities clearly separated. The goal is to support real product evolution with predictable behavior, observability, operational safety, and room for future scale.
+
 ## Features
 - Layered architecture (`Router -> Service -> Repository`)
 - JWT authentication with issuer/audience claims
